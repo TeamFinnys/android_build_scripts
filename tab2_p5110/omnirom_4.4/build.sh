@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Writing by 19cam92@xda
-# Version 5.2
+# Version 5.2.1
 
 SAUCE=~/android/omni-4.4
 ROM=OmniROM
@@ -73,7 +73,8 @@ echo -n "Cherrypick (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
     	echo "Cherrypicking..."
-	./cherrypick.sh
+	SCRIPTDIR1="$(dirname "$0")"
+	"$SCRIPTDIR1/cherrypick.sh"
 	echo "Done!"
 else
     echo "Skipping cherrypick"
@@ -124,9 +125,17 @@ else
 	echo "Done!"
 fi
 
-# Configre's jack compiler
-export ANDROID_JACK_VM_ARGS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4G"
+export LC_ALL=C
 
+# Configre's jack compiler
+echo " "
+echo -n "Configre's jack compiler to 4G (y/n)? "
+read answer
+if echo "$answer" | grep -iq "^y" ;then
+	echo "Setting jack compiler to 4G..."
+	export ANDROID_JACK_VM_ARGS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4G"
+	echo "Done!"
+fi
 
 # Build commands
 echo " "
@@ -136,7 +145,7 @@ croot
 brunch $DEVICE
 
 # Notifys you if build was successful
-if [ -e $SAUCE/out/target/product/$DEVICE/lineageOS_13-*-UNOFFICIAL-$DEVICE.zip ]; then
+if [ -e $SAUCE/out/target/product/$DEVICE/lineage-*.zip ]; then
 	echo "Build Successful..."
 else
 	echo "Build Failed..."
