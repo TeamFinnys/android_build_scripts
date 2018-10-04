@@ -1,19 +1,20 @@
 #!/bin/bash
 
-# Writing by 19cam92@xda
-# Version 5.2.1
-
 SAUCE=~/android/lineage
 ROM=CyanogenMod
 VENDOR=Samsung
 DEVICE=p5110
 REPO=https://github.com/LineageOS/android.git
 BRANCH=cm-10.2
+CCACHESIZE=50G
 
 ###############################################################################################################################################
 
 printf '\033]2;%s\007' "Building $ROM For $VENDOR $DEVICE"
 echo Building $ROM For $VENDOR $DEVICE
+echo " "
+echo "Writing by 19cam92@xda"
+echo "Script version 5.3"
 
 # Check to see if repo is installed
 if [ -e ~/bin/repo ]; then
@@ -28,15 +29,22 @@ else
 	chmod a+x ~/bin/repo
 fi
 
+# Add Android SDK platform tools to path
+if [ -d "$HOME/android/platform-tools" ] ; then
+	export PATH="$HOME/android/platform-tools:$PATH"
+fi
+
 # Make Directory
 if [ ! -d "$SAUCE" ]; then
 	echo "Making Directory"
 	mkdir $SAUCE
 fi
 
+# Move's to build directory
+cd $SAUCE
+
 # Initializing repository
 echo "Initializing $ROM repository"
-cd $SAUCE
 repo init -u $REPO -b $BRANCH
 
 # Clean's up old build files
@@ -45,15 +53,10 @@ echo -n "Cleanup old build (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
     	echo "Clean old files..."
-	SCRIPTDIR="$(dirname "$0")"
-	"$SCRIPTDIR/cleanupbuildfiles.sh"
-	echo "Done!"
+	make clean
 else
     echo "Skipping cleanup "
 fi
-
-# Move's to build directory
-cd $SAUCE
 
 # Sync lastest source's
 echo " "
@@ -65,19 +68,6 @@ if echo "$answer" | grep -iq "^y" ;then
 	echo "Done!"
 else
     echo "Skipping repo sync"
-fi
-
-# Cherrypick commits
-echo " "
-echo -n "Cherrypick (y/n)? "
-read answer
-if echo "$answer" | grep -iq "^y" ;then
-    	echo "Cherrypicking..."
-	SCRIPTDIR1="$(dirname "$0")"
-	"$SCRIPTDIR1/cherrypick.sh"
-	echo "Done!"
-else
-    echo "Skipping cherrypick"
 fi
 
 # Enable or disable in build superuser
@@ -103,7 +93,7 @@ if echo "$answer" | grep -iq "^y" ;then
 	mkdir ~/.ccache/lineage
 	export USE_CCACHE=1
 	export CCACHE_DIR=~/.ccache/lineage
-	prebuilts/misc/linux-x86/ccache/ccache -M 100G
+	prebuilts/misc/linux-x86/ccache/ccache -M $CCACHESIZE
 	echo "Done!"
 else
 	echo "Disabling ccache..."
