@@ -9,24 +9,49 @@ BRANCH=cm-10.2
 CCACHESIZE=50G
 
 ###############################################################################################################################################
+#Num  Colour    #define         R G B
+
+#0    black     COLOR_BLACK     0,0,0
+#1    red       COLOR_RED       1,0,0
+#2    green     COLOR_GREEN     0,1,0
+#3    yellow    COLOR_YELLOW    1,1,0
+#4    blue      COLOR_BLUE      0,0,1
+#5    magenta   COLOR_MAGENTA   1,0,1
+#6    cyan      COLOR_CYAN      0,1,1
+#7    white     COLOR_WHITE     1,1,1
+
+yellow=`tput setaf 3`
+green=`tput setaf 2`
+cyan=`tput setaf 6`
+red=`tput setaf 1`
+reset=`tput sgr0`
 
 printf '\033]2;%s\007' "Building $ROM For $VENDOR $DEVICE"
-echo Building $ROM For $VENDOR $DEVICE
-echo " "
+echo "${cyan}Building $ROM For $VENDOR $DEVICE$"
+echo ""
 echo "Writing by 19cam92@xda"
-echo "Script version 5.3"
+echo "Script version 5.4${reset}"
 
-# Check to see if repo is installed
-if [ -e ~/bin/repo ]; then
-	echo " "
-	echo "Repo's already installed"
+# Install build packages
+echo " "
+echo "${yellow}Installing build tools${reset}"
+sudo apt-get install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libwxgtk3.0-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
+
+# Install repo
+echo " "
+echo "${yellow}Installing repo${reset}"
+sudo apt-get install repo
+
+# Check to see if platfrom tools are there
+if [ -d "$HOME/android/platform-tools" ]; then
+    echo " "
+    echo "${green}Platform Tools are installed${reset}"
 else
-	echo " "
-	echo "Installing Repo"
-	mkdir ~/bin
-	curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-	echo "Setting Premissions"
-	chmod a+x ~/bin/repo
+    echo " "
+    echo "${red}Platfrom Tools arent installed."
+    echo "Please download is an unzip it to the home folder."
+    echo "https://dl.google.com/android/repository/platform-tools-latest-linux.zip${reset}"
+    read
 fi
 
 # Add Android SDK platform tools to path
@@ -34,9 +59,27 @@ if [ -d "$HOME/android/platform-tools" ] ; then
 	export PATH="$HOME/android/platform-tools:$PATH"
 fi
 
+# Check to see if java 8 JDK is installed
+echo " "
+echo "${yellow}Installing Java 8 JDK${reset}"
+sudo apt-get install openjdk-8-jdk
+
+# Check to see if repo is installed
+if [ -e ~/bin/repo ]; then
+	echo " "
+	echo "${green}Repo's already installed${reset}"
+else
+	echo " "
+	echo "${yellow}Installing Repo${reset}"
+	mkdir ~/bin
+	curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+	echo "${yellow}Setting Repo Premissions${reset}"
+	chmod a+x ~/bin/repo
+fi
+
 # Make Directory
 if [ ! -d "$SAUCE" ]; then
-	echo "Making Directory"
+	echo "${yellow}Making Directory${reset}"
 	mkdir $SAUCE
 fi
 
@@ -44,26 +87,27 @@ fi
 cd $SAUCE
 
 # Initializing repository
-echo "Initializing $ROM repository"
+echo " "
+echo "${yellow}Initializing $ROM repository${reset}"
 repo init -u $REPO -b $BRANCH
 
 # Clean's up old build files
 echo " "
-echo -n "Cleanup old build (y/n)? "
+echo -n "${yellow}Cleanup old build (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
     	echo "Clean old files..."
 	make clean
 else
-    echo "Skipping cleanup "
+    echo "Skipping cleanup"
 fi
 
 # Sync lastest source's
 echo " "
-echo -n "Sync repo (y/n)? "
+echo -n "${yellow}Sync repo (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
-    	echo "Running repo sync..."
+    echo "$Running repo sync..."
 	repo sync
 	echo "Done!"
 else
@@ -72,7 +116,7 @@ fi
 
 # Enable or disable in build superuser
 echo " "
-echo -n "Enable build in superuser (y/n)? "
+echo -n "${yellow}Enable build in superuser (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Enabling SU..."
@@ -86,7 +130,7 @@ fi
 
 # Enable or disable ccache
 echo " "
-echo -n "Enable ccache (y/n)? "
+echo -n "${yellow}Enable ccache (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Enabling ccache..."
@@ -103,7 +147,7 @@ fi
 
 # Enable or disable ninja wapper
 echo " "
-echo -n "Disable ninja wapper (y/n)? "
+echo -n "${yellow}Disable ninja wapper (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Disabling ninja wapper..."
@@ -119,7 +163,7 @@ export LC_ALL=C
 
 # Configre's jack compiler
 echo " "
-echo -n "Configre's jack compiler to 4G (y/n)? "
+echo -n "${yellow}Configre's jack compiler to 4G (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Setting jack compiler to 4G..."
@@ -136,9 +180,9 @@ brunch $DEVICE
 
 # Notifys you if build was successful
 if [ -e $SAUCE/out/target/product/$DEVICE/lineage-*.zip ]; then
-	echo "Build Successful..."
+	echo "${green}Build Successful...${reset}"
 else
-	echo "Build Failed..."
+	echo "${red}Build Failed...${reset}"
 fi
 
 # Kills java after build incase it's still runng
