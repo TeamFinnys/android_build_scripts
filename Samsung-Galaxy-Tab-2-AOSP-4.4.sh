@@ -135,6 +135,7 @@ echo -n "${yellow}Enable ccache (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Enabling ccache..."
+    mkdir ~/.ccache
 	mkdir ~/.ccache/lineage
 	export USE_CCACHE=1
 	export CCACHE_DIR=~/.ccache/lineage
