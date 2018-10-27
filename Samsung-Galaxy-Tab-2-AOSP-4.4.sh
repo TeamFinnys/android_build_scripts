@@ -44,6 +44,11 @@ echo " "
 echo "${yellow}Installing repo${reset}"
 sudo apt-get install repo
 
+# Install git
+echo " "
+echo "${yellow}Installing git${reset}"
+sudo apt install git
+
 # Check to see if platfrom tools are there
 if [ -d "$HOME/android/platform-tools" ]; then
     echo " "
