@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAUCE=~/android/lineage
+SAUCE=~/android/lineage151
 ROM=LineageOS
 VENDOR=Samsung
 DEVICE=greatlte

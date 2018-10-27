@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAUCE=~/android/omni-4.4
+SAUCE=~/android/omni44
 ROM=OmniROM
 VENDOR=Samsung
 DEVICE=espressowifi

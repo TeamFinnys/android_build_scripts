@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAUCE=~/android/lineage
+SAUCE=~/android/lineage102
 ROM=CyanogenMod
 VENDOR=Samsung
 DEVICE=p5110
