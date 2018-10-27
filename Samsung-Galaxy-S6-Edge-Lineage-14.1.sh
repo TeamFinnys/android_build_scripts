@@ -7,6 +7,7 @@ DEVICE=zeroltexx
 REPO=https://github.com/LineageOS/android.git
 BRANCH=cm-14.1
 CCACHESIZE=50G
+CCACHEFOLDERNAME=lineage141
 
 ###############################################################################################################################################
 #Num  Colour    #define         R G B
@@ -135,9 +136,9 @@ read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Enabling ccache..."
     mkdir ~/.ccache
-	mkdir ~/.ccache/lineage
+	mkdir ~/.ccache/$CCACHEFOLDERNAME
 	export USE_CCACHE=1
-	export CCACHE_DIR=~/.ccache/lineage
+	export CCACHE_DIR=~/.ccache/$CCACHEFOLDERNAME
 	prebuilts/misc/linux-x86/ccache/ccache -M $CCACHESIZE
 	echo "Done!"
 else
