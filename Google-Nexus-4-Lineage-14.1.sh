@@ -70,6 +70,11 @@ echo " "
 echo "${yellow}Installing Java 8 JDK${reset}"
 sudo apt-get install openjdk-8-jdk
 
+# Set java 8 as default JDK
+echo " "
+echo "${yellow}Setting Java 8 as default${reset}"
+sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+
 # Check to see if repo is installed
 if [ -e ~/bin/repo ]; then
 	echo " "
