@@ -55,12 +55,12 @@ if [ -d "$HOME/android/platform-tools" ]; then
     echo "${green}Platform Tools are installed${reset}"
 else
     echo " "
-    echo "${red}Platfrom Tools arent installed."
-    echo "Please download is an unzip it to the home folder."
-    echo "https://dl.google.com/android/repository/platform-tools-latest-linux.zip${reset}"
-    read
+    echo "${red}Platfrom Tools arent installed.${reset}"
+    echo "Downloading Platfrom Tools now"    
+    wget https://dl.google.com/android/repository/platform-tools-latest-linux.zip
+    unzip platform-tools-latest-linux.zip -d ~/android/
+    rm -f platform-tools-latest-linux.zip
 fi
-
 # Add Android SDK platform tools to path
 if [ -d "$HOME/android/platform-tools" ] ; then
 	export PATH="$HOME/android/platform-tools:$PATH"
