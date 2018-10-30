@@ -107,8 +107,9 @@ echo " "
 echo -n "${yellow}Cleanup old build (y/n)? ${reset}"
 read answer
 if echo "$answer" | grep -iq "^y" ;then
-    	echo "Clean old files..."
+    echo "Clean old files..."
 	make clean
+	echo "Done!"
 else
     echo "Skipping cleanup"
 fi
