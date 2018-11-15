@@ -32,7 +32,7 @@ printf '\033]2;%s\007' "Building $ROM For $VENDOR $DEVICE"
 echo "${cyan}Building $ROM For $VENDOR $DEVICE$"
 echo ""
 echo "Writing by 19cam92@xda"
-echo "Script version 5.4.1${reset}"
+echo "Script version 5.4.2${reset}"
 
 # Install build packages
 echo " "
