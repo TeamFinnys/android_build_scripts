@@ -207,6 +207,6 @@ sudo update-alternatives --auto java
 # Kills java after build incase it's still runng
 echo " "
 echo "${yellow}Killing Java incase it's still running${reset}"
-pkill -9 javaa
+pkill -9 java
 
 read
