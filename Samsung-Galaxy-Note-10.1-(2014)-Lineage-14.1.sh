@@ -199,7 +199,14 @@ else
 	echo "${red}Build Failed...${reset}"
 fi
 
+# Set java back to auto
+echo " "
+echo "${yellow}Setting Java back to auto${reset}"
+sudo update-alternatives --auto java
+
 # Kills java after build incase it's still runng
-pkill -9 java
+echo " "
+echo "${yellow}Killing Java incase it's still running${reset}"
+pkill -9 javaa
 
 read
