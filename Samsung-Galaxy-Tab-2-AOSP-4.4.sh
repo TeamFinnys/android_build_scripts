@@ -216,4 +216,6 @@ echo " "
 echo "${yellow}Killing Java incase it's still running${reset}"
 pkill -9 java
 
+echo " "
+echo "${green}Done!!!!${reset}"
 read
